@@ -12,8 +12,7 @@ namespace Dapper.NodaTime
     public class LocalDateTimeHandler : SqlMapper.TypeHandler<LocalDateTime>
     {
         private LocalDateTimeHandler()
-        {
-        }
+        {}
 
         public static readonly LocalDateTimeHandler Default = new LocalDateTimeHandler();
 
@@ -34,7 +33,7 @@ namespace Dapper.NodaTime
                 return LocalDateTime.FromDateTime(dateTime);
             }
 
-            throw new DataException("Cannot convert " + value.GetType() + " to NodaTime.LocalDateTime");
+            throw new DataException($"Cannot convert {value.GetType()} to {typeof(LocalDateTime)}");
         }
     }
 }

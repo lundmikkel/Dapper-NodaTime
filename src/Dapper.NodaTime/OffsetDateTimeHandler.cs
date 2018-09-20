@@ -12,8 +12,7 @@ namespace Dapper.NodaTime
     public class OffsetDateTimeHandler : SqlMapper.TypeHandler<OffsetDateTime>
     {
         private OffsetDateTimeHandler()
-        {
-        }
+        {}
 
         public static readonly OffsetDateTimeHandler Default = new OffsetDateTimeHandler();
 
@@ -34,7 +33,7 @@ namespace Dapper.NodaTime
                 return OffsetDateTime.FromDateTimeOffset(dateTimeOffset);
             }
 
-            throw new DataException("Cannot convert " + value.GetType() + " to NodaTime.OffsetDateTime");
+            throw new DataException($"Cannot convert {value.GetType()} to {typeof(OffsetDateTime)}");
         }
     }
 }

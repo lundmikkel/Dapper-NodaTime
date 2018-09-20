@@ -9,16 +9,17 @@ using DataException = System.InvalidOperationException;
 
 namespace Dapper.NodaTime
 {
-    public class InstantHandler : SqlMapper.TypeHandler<Instant>
+    // TODO: Test
+    public class NullableInstantHandler : SqlMapper.TypeHandler<Instant?>
     {
-        private InstantHandler()
+        private NullableInstantHandler()
         {}
 
-        public static readonly InstantHandler Default = new InstantHandler();
+        public static readonly NullableInstantHandler Default = new NullableInstantHandler();
 
-        public override void SetValue(IDbDataParameter parameter, Instant value)
+        public override void SetValue(IDbDataParameter parameter, Instant? value)
         {
-            parameter.Value = value.ToDateTimeUtc();
+            parameter.Value = value?.ToDateTimeUtc();
 
             if (parameter is SqlParameter sqlParameter)
             {
@@ -26,7 +27,7 @@ namespace Dapper.NodaTime
             }
         }
 
-        public override Instant Parse(object value)
+        public override Instant? Parse(object value)
         {
             if (value is DateTime dateTime)
             {
@@ -39,7 +40,12 @@ namespace Dapper.NodaTime
                 return Instant.FromDateTimeOffset(dateTimeOffset);
             }
 
-            throw new DataException($"Cannot convert {value.GetType()} to {typeof(Instant)}");
+            if (value is DBNull)
+            {
+                return default(Instant?);
+            }
+
+            throw new DataException($"Cannot convert {value.GetType()} to {typeof(Instant?)}");
         }
     }
 }
